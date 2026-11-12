@@ -78,8 +78,8 @@ Creates a new [PointerEvent](/scripting/api-reference/artboards/pointer-event) w
 ```lua highlight={4}
 function handlePointerDown(self: RenderInstance, event: PointerEvent)
   if self.instance then
-    local localPos = event.position - Vector.xy(self.x, self.y)
-    local localEvent = PointerEvent.new(event.id, localPos)
+    local localPos = event.position - Vector.xy(self.x, self.y) -- subtracts the position where pointerDown happens from a given location
+    local localEvent = PointerEvent.new(event.id, localPos) -- rewrites the event.position as localPos, event.Id ensures the current event is being selected.
     local hit = self.instance:pointerDown(localEvent)
     if hit ~= 0 then
       print(
@@ -126,5 +126,13 @@ function handlePointerDown(self: PointerExample, event: PointerEvent)
   end
 end
 ```
+
+N.B Pointer event function is to be called in the return function and does not require to be in function Update or advance e.g
+
+````lua highhlight ={6}
+return function(): Node<RenderInstance>
+return{
+PointerDown = HandlePointerDown -- this calls the function handlePointerDown any time the engine detects a PointerDown by the mouse
+}
 
 
